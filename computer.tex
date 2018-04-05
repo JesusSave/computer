@@ -8,65 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[a4paper,11pt]{book}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Source: http://en.wikibooks.org/wiki/LaTeX/Hyperlinks %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{CJKutf8} % Chinese coding package
-\usepackage[unicode={true}]{hyperref} % 最好保证 hyperref 是最后加载的宏包,The hy­per­ref pack­age is used to han­dle cross-ref­er­enc­ing com­mands in LATEX to pro­duce hy­per­text links in the doc­u­ment.
-\usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{empheq} % Boxes
-%\usepackage[english]{babel}
-\usepackage{tikz}
-\usepackage{pgfplots} % axis
-\usetikzlibrary{arrows.meta} % arrow style 
-\usetikzlibrary{quotes,angles}
-\usetikzlibrary{calc,decorations.pathmorphing}
-\usetikzlibrary{fit}
-\usetikzlibrary{positioning}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 'dedication' environment: To add a dedication paragraph at the start of book %
-% Source: http://www.tug.org/pipermail/texhax/2010-June/015184.html            %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newenvironment{dedication}
-{
-   \cleardoublepage
-   \thispagestyle{empty}
-   \vspace*{\stretch{1}}
-   \hfill\begin{minipage}[t]{0.66\textwidth}
-   \raggedright
-}
-{
-   \end{minipage}
-   \vspace*{\stretch{3}}
-   \clearpage
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Chapter quote at the start of chapter        %
-% Source: http://tex.stackexchange.com/a/53380 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\makeatletter
-\renewcommand{\@chapapp}{}% Not necessary...
-\newenvironment{chapquote}[2][2em]
-  {\setlength{\@tempdima}{#1}%
-   \def\chapquote@author{#2}%
-   \parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
-   \itshape}
-  {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
-\makeatother
-
-\newcommand{\cmd}[1]{\textcolor{blue}{\texttt{\$ #1}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% First page of book which contains 'stuff' like: %
-%  - Book title, subtitle                         %
-%  - Book author name                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{chenbook}
 
 % Book's title and subtitle
 \title{\Huge \textbf{Computer Skills}  \footnote{Notebook of Yiqi Xinzhu} \\ \huge Glory to God the Creator of the Universe}
@@ -101,10 +43,7 @@ Dedicated to God the heavenly father who created all, and the Lord Jesus Christ 
 \chapter*{Preface}
 The website\footnote{\url{https://github.com/amberj/latex-book-template}} for this file contains:
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Give credit where credit is due. %
-% Say thanks!                      %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section*{Acknowledgements}
 \begin{itemize}
 \item A special word of thanks goes to Jesus Christ.
@@ -116,109 +55,12 @@ The website\footnote{\url{https://github.com/amberj/latex-book-template}} for th
 \noindent Amber Jain \\
 \noindent \url{http://amberj.devio.us/}
 
-%%%%%%%%%%%%%%%%
-% NEW CHAPTER! %
-%%%%%%%%%%%%%%%%
+\include{multimedia}
+\include{pdf}
+\include{linux}
+\include{camk}
+\include{github}
 
-\chapter{电脑技术}
-\section{视频合成}
-
-\cmd{mkvmerge\quad -o\quad output.mp4\quad input1.mp4 $\backslash+$ input2.mp4 $\backslash+$ input3.mp4}
-
-\section{音频}
-\subsection{微信音频提取}
-Google Play : Voice Exporter for wechat\\
-\subsection{音频拼接}
-\cmd{mp3wrap output.mp3 *.mp3}
-
-\chapter{PDF}
-\section{Crack password}
-
-PDF user password is authority in even reading, ower password is authority in editing.
-
-\cmd{sudo apt install pdfcrack}
-
-\cmd{pdfcrack} to see funtions options, \\
-
-\cmd{pdfcrack -f testpdf.pdf}\\
-
-\cmd{pdfcrack -f testpdf.pdf -o}\\
-Here, -o means ower password 
-
-\section{Edit index}
-
-\cmd{./jpdfbookmarks} start app
-
-\section{Edit text etc}
-
-masterpdfeditor4
-
-
-\chapter{Linux}
-
-\section{command}
-
-\cmd{ls -sh},  list contents in size, in human readable unit
-\cmd{ls -i}, list contents in size, machine readable unit
-
-\section{install}
-\cmd{sudo apt install appname}
-
-\cmd{sudo apt remove appname}
-
-\cmd{sudo apt purge appname}
-\section{unzip}
-
-\begin{table}[ht]
-\caption{unzip} % title of Table
-\centering % used for centering table
-\begin{tabular}{c c c c}
-% centered columns (4 columns)
-\hline\hline %inserts double horizontal lines
-File name & untar & compile & notes \\ [0.5ex]
-% inserts table
-%heading
-\hline % inserts single horizontal line
-*.tgz & tar xvf  &  & 970 \\
-5 & 45 & 300 & 556 \\ [1ex] % [1ex] adds vertical space
-\hline %inserts single line
-\end{tabular}
-\label{table:nonlin} % is used to refer this table in the text
-\end{table}
-
-
-%\begin{CJK}{UTF8}{gkai}
-%\noindent 间隔
-%\end{CJK}
-
-\chapter{CAMK}
-\section{psk}
-\subsection{Laptop}
-Laptop to connect to psk: \cmd{ssh chen@ssh.camk.edu.pl}
-\subsection{Office Desktop}
-Office computer connection: \cmd{ssh chen@chen}\\
-The first chen is my camk account, the second chen is my computer name. 
-
-\paragraph{Cluster}
-
-Chuck: SLURM  allocate jobs
-\\
-submit the job: \cmd{sbatch example.sh}\\
-monitor jobs: \cmd{squeue/sacct/scontrol}
-\\
-PD pending, R running, CD completed, CA canceled, F failed\\
-kill the job with \cmd{scancel}
-\\
-MPI jobs
-\\
-
-\paragraph{Sync Laptop and Desktop}
-\cmd{rsync -azP ~/localdir chen@ssh.camk.edu.pl:Document} this will sync localdir to ~/Document of Desktop
-\\
-\cmd{rsync -azP chen@ssh.camk.edu.pl:~/Documents /home/jesuslovesme}, this will sync Documents dir from Desktop to laptop
-
-\section{Jupyter}
-In Alex's lecture in 2018 spring, use \cmd{ssh} go to \cmd{/work/alex/lect} and copy the file, use command to start the project: \cmd{jupyter notebook}\\
 
 \end{CJK}
 \end{document}

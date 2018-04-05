@@ -1,0 +1,29 @@
+
+\chapter{CAMK}
+\section{psk}
+\subsection{Laptop}
+Laptop to connect to psk: \cmd{ssh chen@ssh.camk.edu.pl}
+\subsection{Office Desktop}
+Office computer connection: \cmd{ssh chen@chen}\\
+The first chen is my camk account, the second chen is my computer name. 
+
+\paragraph{Cluster}
+
+Chuck: SLURM  allocate jobs
+\\
+submit the job: \cmd{sbatch example.sh}\\
+monitor jobs: \cmd{squeue/sacct/scontrol}
+\\
+PD pending, R running, CD completed, CA canceled, F failed\\
+kill the job with \cmd{scancel}
+\\
+MPI jobs
+\\
+
+\paragraph{Sync Laptop and Desktop}
+\cmd{rsync -azP ~/localdir chen@ssh.camk.edu.pl:Document} this will sync localdir to ~/Document of Desktop
+\\
+\cmd{rsync -azP chen@ssh.camk.edu.pl:~/Documents /home/jesuslovesme}, this will sync Documents dir from Desktop to laptop
+
+\section{Jupyter}
+In Alex's lecture in 2018 spring, use \cmd{ssh} go to \cmd{/work/alex/lect} and copy the file, use command to start the project: \cmd{jupyter notebook}\\
