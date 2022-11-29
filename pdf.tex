@@ -1,26 +1,160 @@
 \chapter{PDF}
 
+\begin{chapquote}{Proverbs 4:7, \textit{ASV Bible}}
+``Wisdom is supreme. Get wisdom. Yes, though it costs all your possessions, get understanding.''
+\end{chapquote}
 
 \section{Crack password}
-
-PDF user password is authority in even reading, ower password is authority in editing.
-
-\cmd{sudo apt install pdfcrack}
-
-\cmd{pdfcrack} to see funtions options, \\
-
-\cmd{pdfcrack -f testpdf.pdf}\\
-
-\cmd{pdfcrack -f testpdf.pdf -o}\\
-Here, -o means ower password 
+PDF user password is authority in even reading, ower password is authority in editing. e.g. Worship Music for Guitar.pdf has ower password as 'WMfG'
+\begin{itemize}
+\item\cmd{sudo apt install pdfcrack}
+\item\cmd{pdfcrack} to see funtions options,
+\item\cmd{pdfcrack -f testpdf.pdf}
+\item\cmd{pdfcrack -f testpdf.pdf -o} -o means owner password 
+\item\cmd{qpdf --password=yourpassword --decrypt in.pdf out.pdf} remove a known password of a book
+\end{itemize}
 
 \section{Edit index}
+\begin{enumerate}
+\item\cmd{./jpdfbookmarks} start app
+\end{enumerate}
 
-\cmd{./jpdfbookmarks} start app
+\section{jPDF Tweak}
+jPDF Tweak is a Java Swing application that can combine, split, rotate, reorder, watermark, encrypt, sign, and otherwise tweak PDF files.
 
-\section{Edit text etc}
+You can use it to make printable booklets from your PDFs, to add PDF bookmarks, effects (page transitions), to combine multiple PDF files, to watermark them, to rotate pages that do not fit, to attach files to your PDF, to encrypt and sign your PDFs, to change metadata (like author or keywords), and much more.
 
-masterpdfeditor4
+\section{Add OCR layer}
+\begin{itemize}
+\item\cmd{ocrmypdf --deskew --clean-final --remove-background -l ell+heb+eng+chi_sim input.pdf output.pdf}
+\end{itemize}
+
+ell is Greek language support. heb is Hebrew, pol is Polish, fra is French
+
+\section{Change Page Size}
+
+由于各种不同全开纸张的幅面大小差异，故同开数的书籍幅面因所用全开纸张不同而有大小差异，如书籍版权页上“787x1092 1/16”是指该书籍是用787x1092mm规格尺寸的全开纸张切成的16开本书籍。
+
+\begin{itemize}
+\item A4 (210x297 mm)
+\item A5 (148x210 mm)
+\item\cmd{pdfinfo in.pdf} to check size information.\\
+\item\cmd{pdfjam --outfile out.pdf --paper a4paper in.pdf} change into a4 size.
+\end{itemize}
+
+\section{Add text to PDF}
+\begin{enumerate}
+\item\cmd{xournal} good
+\item\cmd{okular}
+\item\cmd{libreoffice -draw in.pdf} add text
+\end{enumerate}
+
+\section{Scantailor-Advanced}
+
+制作电子书，Input files must be figure formats.
+
+\section{Merge multiple files into one}
+\begin{itemize}
+\item \cmd{pdftk in1.pdf in2.pdf cat output out.pdf} merge pdfs while keeps the hyperlinks
+\item \cmd{pdfunite in1.pdf in2.pdf out.pdf} merge to one
+\item \cmd{pdfjoin *.pdf} join selected files (Ubuntu 18.04 and later may miss)
+\end{itemize}
+
+\section{Extract figures}
+\begin{itemize}
+\item \cmd{pdfimages -list input.pdf} list embedded figures, not work with pdf or eps figures!
+\item \cmd{pdfimages -all input.pdf outdir/img} extract figures with all default formatsinto outdir with prefix 'img'
+\item \cmd{pdfimages -png input.pdf outdir/img} extract figures and convert in png format
+\end{itemize}
+
+\section{Crop PDF}
+\begin{enumerate}
+\item\cmd{pdfcrop -margins '-80 -370 -60 -50' in.pdf out.pdf} margins parameter: left, top, right, bottom. The OCR are original and not cropped.
+\item\cmd{pdfjam  --trim "35mm 45mm 65mm 180mm"  --suffix "1" --papersize '\{10cm, 6cm\}' 3.pdf} hard to use!
+\end{enumerate}
+
+\section{Extract pages}
+\begin{itemize}
+\item\cmd{qpdf input.pdf --pages . 1-10 -- output.pdf} extrac 1-10 pages keep metadata, keep bookmarks, keep size, (17/9/2021 CAMK not work)
+\item\cmd{qpdf input.pdf --replace-input --pages . 1-2,4-379 --} remove page 3 from a book with 379 pages
+\item\cmd{pdftk in.pdf cat 2-5 output out.pdf} extract 2-5 pages, original size, keep hyperlinks, annotations, ect. Bookmarks lost (IFPILM 20/7/2022)
+\item\cmd{pdfjam input.pdf 2-5 -o out.pdf --noautoscale true} extract 2-5 pages，not autoscale to A4 (17/9/2021 CAMK not work), default output A4. 
+\item\cmd{qpdf --empty input.pdf --pages . 1-10 -- output.pdf} extrac 1-10 pages, remove metadata, keep size
+\item\cmd{qpdf --split-pages infile.pdf output.pdf} would split into single pages, keep size
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption={Split PDF using pdfjam and Python}]
+import os
+
+NTMIN = 0
+NTMAX = 400
+DT = 1
+for i in range((NTMAX-NTMIN)/DT+1):
+  os.system('pdfjam input.pdf '+('%04d'%i)+' -o '+('%04d'%i)+'.pdf' )
+\end{lstlisting}
+
+\section{Reverse page order}
+\begin{itemize}
+\item \cmd{pdftk in.pdf cat end-1 output out.pdf} reverse order
+\item \cmd{qpdf --empty --pages in.pdf z-1 -- out.pdf} reverse order
+\item \cmd{pdfjam in.pdf 'last-1' --outfile out.pdf} the out scale default is A4!
+\end{itemize}
+
+\section{Rotate}
+
+\begin{itemize}
+\item \cmd{pdf90 input.pdf} or \cmd{pdfjam --landscape --angle==90 input.pdf} rotate 90 degree anti-clockwise, output file 'input-ratate90.pdf'
+\item \cmd{pdf180 input.pdf} or \cmd{pdfjam --angle==180 input.pdf}
+\item \cmd{pdf270 input.pdf} or  \cmd{pdfjam --landscape --angle==270 input.pdf}
+\end{itemize}
 
 
+\section{Combine mutiple pages to one}
 
+\begin{itemize}
+\item \cmd{pdftk in1.pdf in2.pdf cat output out.pdf} comine files into one, keeps the hyperlinks, notes
+\item \cmd{pdfjam input.pdf --nup 2x1 --landscape --outfile output.pdf} 2x1 is side by side, landscape is the output horizontal
+\item \cmd{pdfjam input.pdf --nup 1x2 --no-landscape --outfile output.pdf} 1x2 is bottom by top, vertically combine 2 pages into 1
+\end{itemize}
+
+
+\section{Pdfshuffler}
+\begin{itemize}
+\item pdfshuffler is easy to use as rotate, extract and add pages
+\item Pdfarranger is the new active version
+\end{itemize}
+
+\section{Okular}
+\begin{itemize}
+\item F3, search
+\item F5, refresh
+\item F6, reviews (anomations)
+\item F7, show side bar
+\item ctrl+shift+f, full screen
+\item \cmd{Ctrl+M} hide toolbar
+\item \cmd{Alt+Space} window size settings, i.e. fullscreen
+\end{itemize}
+
+\section{Convert format}
+\begin{enumerate}
+\item\cmd{pdfjam example.jpg} convert jpg to PDF
+\item\cmd{rsvg-convert -f pdf -o out.pdf in.svg} convert svg to PDF, nice
+\end{enumerate}
+
+\section{Signature}
+\begin{itemize}
+\item Create .svg signature by Inkskape
+\item Or create .svg signature by online Google Drive>New>More>Drawing>Insert>Line>Scribble
+\item Attach signature to PDF, can use qpdf, pdftk, xournal (harm the bookmark), okular (easy remove, but don't support pdf stamp)
+\item \cmd{Xournal} import .svg signature, export to PDF
+\item okular>F6>7> Attach Stamp also does similar work 
+\item Xournal texts supports Polish or Chinese letters
+\item Xournal annotations cannot change after exported to PDF
+\end{itemize}
+
+\subsection{Overlay a figure}
+\begin{enumerate}
+\item\cmd{pdfjam --paper 'a4paper' --scale 0.3 --offset '7cm -12cm' image.pdf} make image.pdf to the bottom right corner, or upper left (-7cm, 12cm) 
+\item\cmd{qpdf in.pdf --overlay --to=4 stamp.pdf --out.pdf} overlay stamp to page 4
+\item \red{How can remove a watermark overlayer?}
+\end{enumerate}

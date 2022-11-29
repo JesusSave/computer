@@ -1,29 +1,130 @@
-
 \chapter{CAMK}
-\section{psk}
+\section{Connect to Networks}
+\begin{itemize}
+\item\cmd{ssh chen@ssh.camk.edu.pl} connect to camk server
+\item\cmd{ssh -X -J chen@ssh.camk.edu.pl chen@chen} connect wo camk server and connect to machine 'chen'
+\item\cmd{ssh chuck} when connected with camk server, this connect further to cluster chuck
+\end{itemize}
+
+\subsection{Remote desktop}
+\begin{enumerate}
+\item The admian Staszek installed \cmd{vnc} on the computer 'chen'
+\item \cmd{ssh chen@ssh.camk.edu.pl chen@chen} connect to computer 'chen'
+\item \cmd{vncpasswd} to set the password for vnc-viewer. 'b*****g'
+\item \cmd{sudo apt install tigervnc-viewer} install vnc-viewer on the remote computer
+\item \cmd{vncviewer -via chen@ssh.camk.edu.pl chen} remotely connect to the computer desktop 'chen'
+\end{enumerate}
+
 \subsection{Laptop}
-Laptop to connect to psk: \cmd{ssh chen@ssh.camk.edu.pl}
+Laptop to connect to networks: \cmd{ssh -X chen@ssh.camk.edu.pl}, optional -X or -Y flag enable client X11 open figures in the server
+
 \subsection{Office Desktop}
 Office computer connection: \cmd{ssh chen@chen}\\
-The first chen is my camk account, the second chen is my computer name. 
+The first chen is my camk account, the second chen is my computer name.
 
-\paragraph{Cluster}
+\section{Printer}
+\begin{itemize}
+\item \cmd{73691945} To jest mój password. lp3c(only scan), lp4c (new printer), lp5c (no need of passward)
+\item \cmd{/scratch/1m/chen/lp3-scanner} is the storage folder of my scanned material
+\end{itemize}
 
-Chuck: SLURM  allocate jobs
-\\
-submit the job: \cmd{sbatch example.sh}\\
-monitor jobs: \cmd{squeue/sacct/scontrol}
-\\
-PD pending, R running, CD completed, CA canceled, F failed\\
-kill the job with \cmd{scancel}
-\\
-MPI jobs
-\\
+\section{Storage}
+\begin{enumerate}
+\item\cmd{/work/archive/Lectures} lectures video recorded.
+\end{enumerate}
 
-\paragraph{Sync Laptop and Desktop}
-\cmd{rsync -azP ~/localdir chen@ssh.camk.edu.pl:Document} this will sync localdir to ~/Document of Desktop
-\\
-\cmd{rsync -azP chen@ssh.camk.edu.pl:~/Documents /home/jesuslovesme}, this will sync Documents dir from Desktop to laptop
+\section{Cluster Chuck and SLURM}
+Formerly the cluster name is PSK. From 2018, CAMK has new cluster chuck, using SLURM to allocate jobs
 
-\section{Jupyter}
-In Alex's lecture in 2018 spring, use \cmd{ssh} go to \cmd{/work/alex/lect} and copy the file, use command to start the project: \cmd{jupyter notebook}\\
+\begin{itemize}
+\itemsep0em
+\item \cmd{ssh chuck} login
+\item \cmd{sinfo --help} read tips 
+\item \cmd{sinfo -N -l} node-oriented fashion, and more informatoin
+\item \cmd{sbatch example.sh} submit the job
+\item \cmd{squeue} see current job queue
+\item \cmd{squeue -u USER} see jobs of specific user
+\item \cmd{scontrol show job JOBID} check detail of the job
+\item \cmd{scancel JOBID} kill the job
+\item Job States: PD pending, R running, CD completed, CA canceled, F failed
+\item MPI jobs
+\end{itemize}
+
+
+\subsection{Disk quota}
+\begin{itemize}
+\item \cmd{quota} check my disk quota
+\item \cmd{quota -vs} check my disk quota in human readable unit
+\item \cmd{quota -u USER} check disk quota
+\end{itemize}
+
+\subsection{Time limit}
+\begin{itemize}
+\item \cmd{sacct -e} check elements list
+\item \cmd{sacct --format="Timelimit"} check time limit of runing job
+\item \cmd{scontrol update jobid=<JOBID> TimeLimit=<newtimelimit>} adding time to running job, requires admin privileges on some machines. CAMK max is 7 days.
+\end{itemize}
+
+\section{chuck example with Zeltron code}
+\subsection{Log in}
+\begin{itemize}
+\item \cmd{ssh chen@chuck} login the CAMK local cluster chuck
+\end{itemize}
+
+\subsection{Setting simulation configuration and SLURM job bash script}
+
+\begin{itemize}
+\item \cmd{vi mod\_input.f90} setting simulation parameters
+\item \cmd{vi submit\_zeltron\_chuck.sh} edit the SLURM bash script before submitting the job
+  \begin{itemize}
+  \item time limit, chuck upper limit is 7 days
+  \item data storaging path
+  \item CPUs and nodes, the number of processors n should be the same as NPX*NPY in Zetron setting by mod\_input.f90. In Harris layer simulation, 1) Better to set NPY number as $4*$ times to allocate particles equally. 2) Better to increase NPX than NPY because anisotropic configuration
+  \item Number of nodes (N), one node in chuck has $N = 20$ processors.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Submiting and checking the job}
+
+\begin{itemize}
+\item \cmd{ssh chuck} log into chuck cluster
+\item \cmd{cd /work/chuck/chen/harris01} Go to the work folder
+\item \cmd{./run\_zeltron.sh} compile and submitting the job into the queue. Or manually as
+  \begin{itemize}
+  \item \cmd{module load mpi} load the Message Passing Interface (MPI) module
+  \item \cmd{make} compile zeltron code 
+  \item \cmd{sbatch submit\_zeltron\_chuck.s} submit the job into the queue
+  \end{itemize}
+\item \cmd{squeue -u chen} check the job status
+\end{itemize}
+
+\subsection{Results Analysis}
+
+
+Quick plot in the server
+
+\begin{itemize}
+\item \cmd{gnuplot} start gnuplot to quick plot the map of magnetic field in the server
+\item \cmd{gnuplot> plot 'spec_ele_t1000.dat'} plot 1D data
+\item \cmd{plot "data.txt" using 1:2} \red{plot coloum 2 on 1}
+\item \cmd{gnuplot> plot 'Bx\_t0.dat' matrix w image} plot map
+\end{itemize}
+
+
+Check in local worksation
+
+\begin{itemize}
+\item\cmd{python diagnose.py} (this does not work on chuck, can be called at local workstation)
+\item parameters.dat shows some basic parameter values
+\item zeltron.log shows the current status of the program
+\item Eem.dat and similar files contain information on the total energy content, can be plotted with
+\end{itemize}
+
+
+\subsection{Errors}
+
+\begin{itemize}
+\item mpirun signal 9 (killed) problem: Memory overflow issue. Memery is per CPU 'SBATCH --mem-per-cpu=3GB', so CUP number is important.
+\end{itemize}
+
+

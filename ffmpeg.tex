@@ -1,0 +1,196 @@
+\chapter{FFmpeg}
+
+\section{Flags}
+\begin{itemize}
+\item \cmd{h, H} input height and output height
+\item \cmd{-vf "setpts=5*PTS"} Presenting Time Stamp slow 5 times
+\item \cmd{-r 23.976} Frame rate per second, can be integer or float
+\item \cmd{-start_number 100} figure start number at 100
+\item \cmd{-frames:v 80} total frame number 80
+\item \cmd{-ss} seek within the input, if put ahead the \verb|-i| input is input seeking, will bypass the decoding before \verb|-ss|, fast; Ohterwise is output seeking, decode from initial, until seek the time at \verb|-ss|, so is very slow.
+\item \cmd{-t} is the duration. timestamp expressed in seconds, NAN if the input timestamp is unknown
+\item \cmd{-to} is the end of the video
+\item \cmd{-c copy} will not re-encode, finish instantly
+\item \cmd{-map 0} From input index \#0 (the 1st input) select all streams.
+\item \cmd{-map 1:a} From input index \#1 (the 2nd input) select all audio streams.
+\item \cmd{-map 3:s:4} From input index \#3 (the 4th input) select subtitle stream index \#4 (the fifth subtitle stream).
+\item \cmd{-map 0 -map -0:s} Will select all streams from input index \#0 (the 1st input) except subtitles. The - indicates negative mapping.
+\end{itemize}
+
+\section{Convert format}
+
+\begin{itemize}
+\item \cmd{ffmpeg -i video.webm -strict experimental video.mp4} Convert webm to mp4
+\end{itemize}
+
+\section{Reduce Video Size}
+\begin{itemize}
+\item \cmd{ffmpeg -i input.mp4 -vf scale="iw/1.125:ih/1.125" output.mp4}
+reduce ratio by factor 1.125, slightly less. This method quality is bad, please rather check bash lines in ~/Documents/editor/ffmpeg.
+\item 
+\cmd{ffmpeg -i input.mp4 -vf "scale=iw*0.9:ih*0.9" output.mp4}
+better with multiply
+\item
+\cmd{ffmpeg -i input.mp4 -filter:v "setpts=2*PTS" output.mp4}
+speed of video
+\item 
+\cmd{ffmpeg -i input.mp4 -filter:a "atempo=2.0" -vn output.mp4}
+speed of audio
+\item 
+\cmd{ffmpeg -i input.mp4 -filter\_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" output.mp4}
+speed up both video and audio at the same time
+\end{itemize}
+
+
+\section{Hard Subtitle}
+\begin{itemize}
+\item \red{ffmpeg subtitle audo change lines need space, if Chinese should add space behind signs}
+\item\cmd{gedit example.srt} hours:minutes:seconds,milliseconds:
+
+1\\
+00:00:00,000 -{}-> 00:00:20,400\\
+主耶稣\\
+\\
+2\\
+00:00:20,100 -{}-> 00:00:28, 800\\
+我感谢你\\
+
+\item\cmd{ffmpeg -i input.mp4 -vf subtitles=input.srt output.mp4}
+\item\cmd{ffmpeg -i input.mp4 -vf "subtitles=input.srt:force_style='Fontsize=36'" -c:a copy output.mp4} define fontsize
+\end{itemize}
+
+\section{Cut video}
+\begin{itemize}
+\item \cmd{ffmpeg -ss 00:00:03 -i input.mp4 -t 00:00:08 -async 1 output.mp4} cut with duration
+\item \cmd{ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -c copy output.mp4} cut with end time
+\end{itemize}
+
+
+\section{Combine audio to video}
+
+\cmd{ffmpeg -i INPUT.mp4 -i AUDIO.wav -shortest -c:v copy -c:a aac -b:a 256k OUTPUT.mp4}
+
+\section{Contact Videos}
+
+\begin{enumerate}
+\item
+\begin{lstlisting}[language=Python, caption={Create source list: input.txt}]
+file '/home/jenia/input1.mp4'
+file '/home/jenia/input2.mp4'
+file '/home/jenia/input3.mp4'
+\end{lstlisting}
+\item
+\cmd{ffmpeg -f concat -i input.txt -codec copy output.mp4}
+\end{enumerate}
+
+\section{Extract audio}
+
+\begin{itemize}
+\item 法一 \cmd{ffmpeg -i video.mp4 audio.mp3}
+
+\item 法二 \cmd{sudo apt-get install ffmpeg libavcodec-extra libav-tools}\\
+\cmd{avconv -i in.mp4 out.mp3}
+
+\item 法三
+\cmd{sudo apt-get install ffmpeg libavcodec-unstripped-52}\\
+\cmd{ffmpeg -i video.mp4 -f mp3 -ab 192000 -vn music.mp3}
+
+\item 法四 use VLC
+\end{itemize}
+
+
+\section{Replace audio}
+
+\cmd{ffmpeg -i video.mp4 -i audio.wav -c:v copy -map 0:v:0 -map 1:a:0 new.mp4}
+
+
+\section{Picture make Video}
+
+\begin{itemize}
+\item \cmd{ffmpeg -loop 1 -y -i pic.jpg -i sound.amr -shortest video.mp4} cellphone black screen, upload to YouTube and download back, so can share with phone!
+\item \cmd{ffmpeg -i ep1.png -i ep1.wav ep1.flv} produce with smaller size, but YouTube don't accept it.
+\item \cmd{ffmpeg -loop 1 -y -i image8.jpg -i sound11.amr -shortest -acodec copy -vcodec mjpeg result.avi} but video from png too big (jpg not sure)
+\end{itemize}
+
+
+\section{Multi fig plus audio}
+
+\begin{lstlisting}[language=bash, caption={Multi fig plus audio}]
+ffmpeg -i figduration.ffconcat -i g.mp4 \
+-vf "scale='min(1280,iw)':-2,format=yuv420p" \
+-c:v libx264 -preset veryslow -profile:v main \
+-c:a aac -shortest -movflags +faststart g1.mp4
+
+# Set different duration of each figure in figduration.ffconcat as:
+ffconcat version 1.0
+file g1.png
+duration 36
+file g2.png
+duration 15.5
+file g2.png
+\end{lstlisting}
+
+
+\section{Speed up part of the video}
+
+\begin{lstlisting}[language=bash, caption={Speed up a fraction of the video}]
+ffmpeg -framerate 5 -i mapBz_com_fig%01d.png -vframes 40 part_1.mp4
+
+ffmpeg -start_number 41 -framerate 20 -i mapBz_com_fig%01d.png part_2.mp4
+
+ffmpeg -f concat -safe 0 -i <(for f in ./part_*.mp4; \
+do echo "file '$PWD/$f'"; done) -c copy Bz_map_com.mp4
+
+rm part_*.mp4
+\end{lstlisting}
+
+
+\section{GIF}
+
+\begin{lstlisting}[language=bash, caption={convert video to GIF}]
+#ffmpeg -i video.webm -f gif test.gif # convert all
+ffmpeg -ss 5 -t 2 -i video.webm -f gif test.gif # convert a part
+# -ss 5 # start from 5 sec
+# -t 2 # duration 2 sec
+\end{lstlisting}
+
+
+\section{Text}
+
+\begin{lstlisting}[language=bash, caption={add text}]
+ffmpeg -i mapBz_com_fig%01d.png \
+ -vf drawtext="text='Hello': fontcolor=white: fontsize=100: x=w*0.85: y=h*.1" \
+ part_6.mp4
+\end{lstlisting}
+
+
+\section{Example video}
+
+\begin{lstlisting}[language=bash, caption={Make an example video}]
+# make example figures and produce video
+ffmpeg -f lavfi -i testsrc=d=2000:r=1 %04d.png  
+ffmpeg -start_number 100 -i %04d.png -frames:v 900 output.webm
+
+# check frame
+ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames \
+  -of default=nokey=1:noprint_wrappers=1 output.webm
+\end{lstlisting}
+
+
+\section{Expression Evaluation}
+
+The reference is \url{https://ffmpeg.org/ffmpeg-utils.html}
+\begin{itemize}
+\item \cmd{eq(x,y)} Return 1 if x and y are quivalent, 0 otherwise
+\item \cmd{ceil(expr)} Return the value of x clipped between min and max.
+\item \cmd{floor(expr)} Round the value of expression expr downwards to the nearest integer. For example, "floor(-1.5)" is "-2.0".
+\item \cmd{if(x, y, z)} Evaluate x, and if the result is non-zero return the evaluation result of y, otherwise the evaluation result of z.
+\item \cmd{ifnot(x, y)} Evaluate x, and if the result is zero return the result of the evaluation of y, return 0 otherwise.
+\item \cmd{mod(x, y)}
+Compute the remainder of division of x by y.
+\item \cmd{gt(x, y)} Return 1 if x is greater than y, 0 otherwise.
+\item \cmd{gte(x, y)} Return 1 if x is greater than or equal to y, 0 otherwise.
+\item \cmd{cos(x)} Compute cosine of x.
+\item \cmd{max(x, y)} Return the maximum between x and y.
+\end{itemize}
+

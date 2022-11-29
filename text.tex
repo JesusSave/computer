@@ -1,0 +1,19 @@
+\chapter{Text}
+
+
+\section{Compare}
+
+\cmd{cmp 1.tex 2.tex} compare two similar files\\
+
+
+\section{Print to screen}
+
+\cmd{head 1.tex} show top 10 lines\\
+\cmd{less 1.tex} show in segments
+
+
+\section{Spell Checking}
+\cmd{aspell -t -c file.tex} , t option is for \TeX{} or \LaTeX{} format.\\
+\cmd{aspell -t -c file.tex \&\& pdflatex file.tex} checking and compiling at the same time.\\
+\cmd{cat file.tex | aspell list -t | sort |uniq} get a list of misspelled words non-interactively.
+

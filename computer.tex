@@ -1,66 +1,71 @@
 % -*- coding: utf-8 -*-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Notebook of astrophysics
-% Version 1.1 (17/3/2017)
-% Author : Yiqi Xinzhu
-% c275633094@gmail.com
-% 注意： Windows下中文编码用GBK，Linux编码为Utf8，否则乱码哟！一起信主20170228 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,11pt,oneside]{book}
+\input{/home/chen/Documents/latex/common/QCbook4.sty}
+%\input{/home/chen/Documents/latex/common/QCbook5.sty}
+%\input{/home/chen/Documents/latex/common/math.sty}
+%\input{/home/chen/Documents/latex/common/language_v2.sty}
+%\input{/home/chen/Documents/latex/common/language_cn.sty}
 
-\documentclass[a4paper,11pt]{book}
-\usepackage{chenbook}
-
-% Book's title and subtitle
-\title{\Huge \textbf{Computer Skills}  \footnote{Notebook of Yiqi Xinzhu} \\ \huge Glory to God the Creator of the Universe}
-% Author
+\title{{\Huge\color{red}\bfseries Linux Skills} Notes\footnote{A Private Notebook of Yiqi Xinzhu} \\ \large Glory to God the Creator of the Universe}
+\date{\today}
 \author{\textsc{Qiang Chen}\thanks{\url{c275633094@gmail.com}}}
 
-
 \begin{document}
-\begin{CJK}{UTF8}{gbsn}
+%\begin{CJK}{UTF8}{gbsn}
 \frontmatter
 \maketitle
+\addcontentsline{toc}{chapter}{Titlepage}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Add a dedication paragraph to dedicate your book to someone %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{dedication}
 Dedicated to God the heavenly father who created all, and the Lord Jesus Christ my savior.
 \end{dedication}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Auto-generated table of contents, list of figures and list of tables %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tableofcontents
-\listoffigures
-\listoftables
+\addcontentsline{toc}{chapter}{Contents}
+%\listoffigures
+%\addcontentsline{toc}{chapter}{List of Figures}
+%\listoftables
+%\addcontentsline{toc}{chapter}{List of Tables}
 
 \mainmatter
-
-%%%%%%%%%%%
-% Preface %
-%%%%%%%%%%%
 \chapter*{Preface}
 The website\footnote{\url{https://github.com/amberj/latex-book-template}} for this file contains:
-
 
 \section*{Acknowledgements}
 \begin{itemize}
 \item A special word of thanks goes to Jesus Christ.
 \item I'll also like to thank my parents and my brother.
-
 \end{itemize}
 \mbox{}\\
 %\mbox{}\\
 \noindent Amber Jain \\
 \noindent \url{http://amberj.devio.us/}
 
-\include{multimedia}
+\include{notice}
+\include{file}
+\include{text}
+\include{fcitx}
+\include{dict}
 \include{pdf}
-\include{linux}
+\include{figure}
+\include{multimedia}
+\include{ffmpeg}
+\include{system}
+\include{cpu}
+\include{font}
+\include{package}
+\include{lubuntu}
+\include{xubuntu}
+\include{hardware}
+\include{troubleshoot}
+\include{shortcut}
+\include{network}
+\include{laptop}
+\include{desktop}
 \include{camk}
+\include{cluster}
 \include{github}
+\include{android}
 
-
-\end{CJK}
+%\end{CJK}
 \end{document}

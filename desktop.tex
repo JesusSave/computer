@@ -1,0 +1,54 @@
+\chapter{Desktop}
+
+\section{Display}
+
+\cmd{export DISPLAY=:0} or \cmd{export DISPLAY=:0.0} allow terminal launch graphical application
+
+
+\section{Display Manager (DM)}
+
+\cmd{cat /etc/X11/default-display-manager} check default display manager in Ubuntu, me returns /usr/bin/sddm
+
+\blue{ Ubuntu} and luxary version \blue{ Kubuntu} use \blue{ lightdm}. \blue{ Gnome} use \blue{ gdm3}. \blue{ Xubuntu} is lightweight. \blue{ Lubuntu} is lightest x11 desktop, use \blue{ Simple Desktop Display Manager, SDDM}.
+
+\cmd{sudo apt remove lightdm gdm3}
+
+\section{Install desktop use Tasksel}
+
+\cmd{sudo tasksel} to choose desktop version.
+
+\cmd{apt-cache search ubuntu-desktop} to check what available in your comupter.
+
+\cmd{sudo apt install lubuntu-desktop}
+
+
+\subsection{Change splash screen}
+
+\cmd{sudo update-alternatives --config default.plymouth} choose the right number.
+
+\cmd{sudo update-initramfs -u} to update configuration.
+
+
+
+\section{X sever}
+
+\cmd{echo \$DISPLAY} 
+echo command in linux is used to display line of text/string that are passed as an argument . This is a built in command that is mostly used in shell scripts and batch files to output status text to the screen or a file.
+
+[host]:<display>[.screen] \blue{ localhost:18.0} localhost means the X server runs on local computer. An omitted hostname means the localhost. 18 is a sequence number (usually 0). It can be varied if there are multiple displays connected to one computer. 0 is the screen number. A display can actually have multiple screens. Usually there's only one screen though where 0 is the default.
+
+
+\section{SDDM SSH graph}
+
+\begin{itemize}
+\item Open Xserver tcp port。为了安全起见，部分发行版在启动X Server的时候，没有对外开启 X Server 服务，关闭了相应tcp端口，只使用本地unix socket的方式。如果需要远程，还是需要打开tcp port，修改文件 \blue{ /etc/X11/xinit/xserverrc}，删除\blue{ -nolisten tcp}参数
+\item SDDM listen tcp. 对于 mint 或 LXQt 使用 sddm 作为 display manager，需要同时修改\blue{ /etc/sddm.conf}
+\cmd{ServerArguments=-listen tcp}
+\item restart
+\item check \cmd{sudo netstat -plunt}
+
+tcp        0      0 0.0.0.0:6000            0.0.0.0:*               LISTEN      1613/Xorg
+\end{itemize}
+
+
+

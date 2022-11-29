@@ -1,0 +1,23 @@
+\chapter{CPU}
+
+
+
+\section{CPU always busy around 100 percent}
+
+\cmd{grep . -r /sys/firmware/acpi/interrupts/} check which gpe is high\\
+\cmd{sudo crontab -e} edit crontab\\
+\cmd{@reboot echo "disable" > /sys/firmware/acpi/interrupts/gpe11} add a line to turndown gpe11 when start.
+
+
+\section{CPU state}
+
+\cmd{lscpu} check cpu information
+
+\section{Kill stuck process}
+
+\cmd{ps -x} show running processes\\
+\cmd{top} show running processes\\
+\cmd{htop} show running processes\\
+\cmd{pgrep appname} ps+grep, check PID of an app\\
+\cmd{ps +x | grep appname} ps+grep, check PID of an app\\
+\cmd{kill -9 PID} kill process by PID 

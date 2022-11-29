@@ -1,0 +1,10 @@
+\chapter{Troubleshoot}
+
+\section{Blackscreen with failed to idel channel}
+\begin{enumerate}
+\item\cmd{vim /var/log/syslog}
+\begin{lstlisting}[language=bash, caption={cat /var/log/syslog}]
+Sep 23 09:42:50 joy kernel: [89212.492173] nouveau 0000:07:00.0: Xorg[1250]: failed to idle channel 8 [Xorg[1250]]
+\end{lstlisting}
+\item\cmd{software-properties-gtk --open-tab=4} and change X.org driver to NVIDIA driver
+\end{enumerate}

@@ -1,0 +1,21 @@
+\chapter{Lubuntu}
+
+\section{Autostart}
+"Menu > Preferences > LXQt settings > Session Settings"
+
+\section{Shortcut}
+\begin{enumerate}
+\item \cmd{SUPER + R} in LXQT is the same with \cmd{ALT + F2} in other Ubuntu even including LXQt: run a command 
+\end{enumerate}
+
+\section{Bluetooth disable autostart}
+\begin{enumerate}
+\item\cmd{/etc/bluetooth/main.conf} set \verb|AutoEnable=False| (Lubuntu 22.04 LTS)\footnote{\url{https://askubuntu.com/a/1251512/1286546}}
+\item\cmd{gsettings set org.blueman.plugins.powermanager auto-power-on false} 
+to prevent Blueman's power-manager plugin from auto powering the adapter.
+\end{enumerate}
+
+\section{Default apps}
+\begin{enumerate}
+\item\cmd{File Associations} change default applications
+\end{enumerate}

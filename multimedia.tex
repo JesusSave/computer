@@ -1,11 +1,78 @@
-\chapter{电脑技术}
-\section{视频合成}
+\chapter{Multimedia}
 
-\cmd{mkvmerge\quad -o\quad output.mp4\quad input1.mp4 $\backslash+$ input2.mp4 $\backslash+$ input3.mp4}
+\section{Youtube-dl}
+
+\begin{enumerate}
+\item \cmd{pip3 install --upgrade youtube-dl} upgrade
+\item \cmd{youtube-dl URL} download the largest option mdirectly, video and audio
+\item \cmd{youtube-dl -F URL} list available format of video
+\item \cmd{youtube-dl -f number} download above option by number
+\item \cmd{youtube-dl -x URL} download audio
+\item \cmd{youtube-dl -x --audio-format mp3 URL} download as mp3
+\item \cmd{youtube-dl -x --audio-format mp3 --playlist-start 1 --playlist-end 5 URL} download 5 mp3 from playlist
+\end{enumerate}
+
+\section{You-get}
+\begin{itemize}
+\item\cmd{sudo pip3 install you-get} without sudo produce cannot find command error
+\item\cmd{you-get URL} download video
+\item\cmd{you-get -p vlc URL} 将视频喂进VLC观看
+\item\cmd{you-get -p chromium URL} 将视频无广告在浏览器播放
+\end{itemize}
+
+\section{YouKu DownLoader}
+\begin{enumerate}
+\item \cmd{sudo pip3 install -U ykdl}
+\item \cmd{ykdl URL}
+\end{enumerate}
+
+\section{annie}
+\begin{lstlisting}[language=bash, caption={Download and Install Annie}]
+curl -s https://api.github.com/repos/iawia002/annie/releases/latest \
+   | grep browser_download_url \
+   | grep Linux_64-bit \
+   | cut -d '"' -f 4 \
+   | wget -qi -
+tar xvf annie_*_Linux_64-bit.tar.gz
+sudo mv annie /usr/local/bin
+annie -v
+\end{lstlisting}
+\cmd{annie URL} download video
+
+\section{视频合成}
+\begin{enumerate}
+\item \cmd{mkvmerge -o output.mp4 input1.mp4 \+ input2.mp4 \+ input3.mp4}
+\end{enumerate}
+
+\subsection{VOB file}
+\begin{itemize}
+\item \cmd{cat VTS_01_*.vob > output.vob} combine .VOB files
+\item \cmd{cat VTS_O1_*.VOB | pv | dd of=output.vob} Improved version (this will show a progress bar)
+\item \cmd{pv VTS_01_*.vob > output.vob} similar to above
+\item \cmd{ffmpeg -i "concat:VTS_01_1.VOB|VTS_01_2.VOB|VTS_01_3.VOB|VTS_01_4.VOB" -f mpeg -c copy output.mpeg} 
+\end{itemize}
 
 \section{音频}
 \subsection{微信音频提取}
-Google Play : Voice Exporter for wechat\\
-\subsection{音频拼接}
-\cmd{mp3wrap output.mp3 *.mp3}
+\begin{enumerate}
+\item Google Play : Voice Exporter for wechat
+\end{enumerate}
 
+\subsection{音频拼接}
+\begin{itemize}
+\item \cmd{mp3wrap output.mp3 *.mp3}
+\end{itemize}
+
+\section{Poster}
+\begin{itemize}
+\item \cmd{lodraw} Libre office draw make poster.
+\end{itemize}
+
+\section{字幕制作}
+\begin{itemize}
+\item 法一，pyTranscriber 语音识别生成字幕srt 文件
+\item 文字另外可以用 google drive 文档 AI 语音识别文字
+\item 法二，ArcTime\footnote{\url{https://arctime.org/}} 字幕制作软件
+\item 法三，免安装 jubler 进行手写生成 ass 文件（不推薦）
+\item 已经有 srt 文件后，FFmpeg 渲染字幕
+\end{itemize}

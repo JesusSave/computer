@@ -1,0 +1,42 @@
+\chapter{Android}
+
+\begin{chapquote}{Proverbs 4:7, \textit{ASV Bible}}
+``Wisdom is supreme. Get wisdom. Yes, though it costs all your possessions, get understanding.''
+\end{chapquote}
+
+
+\section{Install ADB}
+
+\cmd{sudo apt install android-tools-adb android-tools-fastboot}
+
+USB connect phone to computer, open Developer options (or equivalently tap build number 7 times), enable USB debugging.
+
+\cmd{adb devices} to test connection
+
+\subsection{restart adb daemon}
+\cmd{sudo adb kill-server} 
+\cmd{sudo adb start-server} 
+
+\subsection{Change resolusion and ppi in Blackberry Priv}
+
+\begin{lstlisting}[language=bash, caption={}]
+adb shell wm size 1080x1920
+adb shell wm density 420
+# or set even lower
+#adb shell wm size 720x1280
+#adb shell wm density 280
+adb reboot  # restart the phone
+adb shell wm size reset
+adb shell wm density reset # to reset as default 2560x1440 @ 560ppi
+\end{lstlisting}
+
+
+\section{Blackberry Keyone}
+
+\begin{itemize}
+\item Tim file download directory: \cmd{Internal storage/tencent/TIMFILE_RECV/}
+\item Eudict 浮动取词設置：帐号>跨软件取词>显示浮动取词图标
+\end{itemize}
+
+
+

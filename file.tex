@@ -1,0 +1,160 @@
+\chapter{File}
+
+\section{List command}
+\subsection{Check Size}
+\cmd{du -sh} check folder size, in human readable unit\\
+\cmd{du -csh --block-size=1G} size in GB\\
+\cmd{ls -sh} list contents in size, not folder size, in human readable unit\\
+\cmd{ls -i} list contents in size, machine readable unit\\
+
+\subsection{Counting}
+\cmd{ls -1 | wc -l} list file in 1 line and count lines, i.e. count files number\\
+\cmd{echo */ | wc} count folder number current directory
+
+\subsection{Date}
+\cmd{ls -ltr} give you the recent to the end of the list\\
+\cmd{ll -thr} give you the recent to the end of the list\\
+
+\section{Terminal bash}
+\subsection{Print Screen}
+\cmd{cat file.txt > new.txt} print screen to new file, equivalently to copy a file. \\
+\cmd{./rns -q poly -N 1 -t static -e 0.061 -l 1.469 -n 10 > HW3.dat} run a program and to print screen to local file.
+
+\subsection{Run bash commands in files}
+\cmd{bash example.txt} run commands in the text file.
+
+\section{Find}
+\begin{itemize}
+\item\cmd{find . ! -empty -type f -exec md5sum {} + | sort | uniq -w32 -dD} Find Duplicate Files
+\item\cmd{find . -name 'filename'} Find file by name
+\item\cmd{ls -lsa | grep -E "[d\-](([rw\-]{2})x){1,3}"} Find the executable file
+\item\cmd{find . -name "*.bak" -exec rm -rf {} \;} find *.bak in current directory and delete
+\item\cmd{find . -name '*test*' -exec rm -rf -i {} \;} find *test* files and dirs and delete with confirmaton from user, answer y or n (default)
+\item \verb|-name "FILE-TO-FIND"| : File pattern
+\item \verb|-exec rm -rf {} \;| or simply \verb|-delete|: Delete all files matched by file pattern. \verb|-exec| must be end with \verb|\;| for once per file or \verb|+| for once multiple files
+\item \verb|-type f| : for files and do not include directory names.
+\item \verb|-type d| : for dirs
+\item\cmd{find  /PATH/TO/FILES -type f -printf 'size: \%s bytes, modified at: \%t, path: \%h/, file name: \%f\n' | sort -k15 | uniq -f14 --all-repeated=prepend} find duplicates with same names
+\item\cmd{find -name '*.m4a' -print0 | xargs -0 md5sum | sort | uniq -Dw 32} find duplicates files with different names!
+\end{itemize}
+
+
+\section{grep find word inside files}
+\begin{itemize}
+\item\cmd{grep -e 'texts' ./*.dat} search 'texts' in certain files
+\item\cmd{grep -rnw 'path' -e 'keyword'} search 'keyword' in the files contained in 'path'
+\item\cmd{grep --include=*.\{c,h\} -rnw 'path' -e 'keyword'} include .c and .h files
+\item\cmd{grep --exclude-dir=\{dir1,dir2,*.dst\} -rnw '/path/to/somewhere/' -e "pattern"}
+exclude dir1, dir2 and .dst files
+\item \blue{-r} is recursive
+\item \blue{-n} line number
+\item \blue{-w} match the word
+\end{itemize}
+
+\begin{itemize}
+\item \verb|grep -vf a.dat b.dat| show duplicates lines    
+\item \verb|grep -vf a.dat b.dat > b_new.dat| b file remove duplicates of a
+\end{itemize}
+
+
+\section{Find and change the multiple figs}
+\cmd{mkdir figs}
+%%%%%%%%%%%%%%%%\cmd{find . -maxdepth 1 -iname "*.png" | xargs -L1 -I{} convert -resize 210x297 "{}" figs/"{}"}
+
+\section{AWK}
+\begin{itemize}
+\item\verb|awk -v RS= -v ORS='\n\n' '!seen[$0]++' file(s)| print out contents of file(s) without duplicated paragraphs
+\item code in /awk folder: show a.bib b.bib files duplicated paragraphs
+\end{itemize}
+
+\section{Compress Files}
+\begin{table}[ht]
+\caption{unzip} % title of Table
+\centering % used for centering table
+\begin{tabular}{c lll}
+\hline\hline
+File name & untar & compile & notes \\ [0.5ex]
+\hline
+*.tgz *tar.gz& tar zxvf  & tar zcvf & compressing \\
+*.tar & tar xvf filename & tar cvf out.tar filename & no compress, arxiv source\\ [1ex] 
+*.rar & unrar x filename & & \\
+*.7z & 7za e filename & u7za a outname.7z file &\\
+*.iso & 7z x *.iso -oMydir & &\\
+*.zip & 7z x *.zip -oMydir & &\\
+      & unzip *.zip        & zip -r out.zip files&\\
+      & unzip -O cp936 *.zip & & if Chinese font problem\\
+      & unzip -O GBK *.zip & & if Chinese font problem\\
+\hline 
+\end{tabular}
+\label{table:nonlin}
+\end{table}
+
+
+\section{Rsync transfer file}
+\begin{itemize}
+\item \cmd{cp} will copy without comparing differences
+\item \cmd{cp -n} copy without overwritting
+\item \cmd{rsync} will compare difference then copy necesseary files
+\item \cmd{rsync sourcedir/ destinationdir} sync files in directory
+\item \cmd{rsync sourcedir destinationdir} sync directory
+\item \cmd{destinationdir/} and \cmd{destinationdir} are the same
+\item \cmd{--ignore-existing} skip updating files that exist on receiver
+\item \cmd{-a} attributes, preserving all filesystem attributes
+\item \cmd{-v} verbosely, list the files
+\item \cmd{-u} update, ignore newer versions in the destination
+\item \cmd{-n} not, equiv \cmd{--dry-run} test run without actual changes
+\item \cmd{--progress} show progress
+\end{itemize}
+
+\subsection{Rsync SSH}
+\begin{itemize}
+\item\cmd{rsync -azP ~/Documents chen@ssh.camk.edu.pl:~ --delete} this will sync  $\sim$/Document of Laptop to the Desktop, and delete the extra files.\\
+\item\cmd{rsync -azP chen@ssh.camk.edu.pl:~/Documents /home/jesuslovesme}, sync Documents dir from Desktop to laptop\\
+\item\cmd{rsync -azP ~/Documents/latex chen@ssh.camk.edu.pl:~Document/latex} sync localdir to $\sim$/Document of Desktop
+\end{itemize}
+
+\subsection{Rsync Excluding}
+\begin{itemize}
+\item\cmd{rsync --exclude 'data' --exclude 'figs' -avz harris1/ harris2} exclude directory\\
+\item\cmd{rsync --exclude '*.dat' --exclude '*.png' -avz harris1/ harris2} exclude files
+\end{itemize}
+
+\subsection{scp}
+\begin{itemize}
+\item\cmd{scp chen@ssh.camk.edu.pl:/home/chen/Documents/file.txt ~/Documents} cp from server to local computer
+\end{itemize}
+
+\section{Chmod}
+\begin{itemize}
+\item\cmd{ls -la} show all with permission
+\item\cmd{ls -la filename} show file with permission
+\item\cmd{ls -ld folder} show folder permission
+\item\cmd{chmod u+rx,go-w folder} authorized in visiting the folder
+\item\cmd{chmod u+rw folder} authorized in visiting the folder
+\end{itemize}
+
+\begin{tabular}{lll}
+Number & Permission Type & Symbol\\
+\hline
+0&No Permission&---\\
+1&Execute&--x\\
+2&Write&-w-\\
+3&Execute + Write&-wx\\
+4&Read&r--\\
+5&Read + Execute&r-x\\
+6&Read + Write&rw-\\
+7&Read + Write +Execute&rwx\\
+\hline
+\end{tabular}
+
+\begin{itemize}
+\item the permission request are from user(u), group(g), others(o), or all(a)
+\item \cmd{chmod 764 filename}, assign permissions to user, group and others at the same time
+\item \cmd{chmod g+wr filename}, assign permission to the group
+\end{itemize}
+
+\section{Link a document}
+\begin{itemize}
+\item\cmd{ln link source} create a hard link of sourc
+\item\cmd{ln -s link source} create a soft link of source, edit link will change source
+\end{itemize}

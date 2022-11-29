@@ -1,0 +1,6 @@
+# Shutdown the phone: adb shell reboot -p
+
+# Turn on the phone (blackberry doesn't work): 
+1. Take out your battery and connect the phone to a charger 
+2. Your phone should now turn on. 
+3. Insert your battery.

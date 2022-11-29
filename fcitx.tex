@@ -1,0 +1,100 @@
+\chapter{Fcitx}
+
+\section{小技巧}
+
+\begin{itemize}
+\item \cmd{; + aphabet} print digital emotions: a - amazing, b- bear, bye,  e - effort, l-love,
+\item \cmd{llll} 中文大号圆圈“一九九○”（\blue{Cjk} 无法显示）
+\item \cmd{lklu} 中文日期圆圈号 “二○二○”（\blue{Cjk} 下可使用这个）
+\item \cmd{Ctrl+.} 中文下为中英标点切换，英文下为符号表情。
+\item 输入框选字翻頁：-/=
+\item\cmd{ctrl+;} clipboard history
+\end{itemize}
+
+\section{词库}
+\subsection{编辑或查询自定义词库}
+\cmd{sudo apt install fcitx-tools} 安装编辑字库的工具
+
+fcitx 自带的五笔词库： /usr/share/fcitx/table/wbx.mb 或~/.config/fcitx/table/里。转换词库为可编辑文本：
+
+\cmd{mb2txt wbx.mb >> wbx.txt}
+
+上面生成的 wbx.txt 是纯文本文件，修改完后，用下面的命令转换成二进制词库：
+
+\cmd{txt2mb wbx.txt wbx.mb}
+
+\cmd{fcitx -r} 重启输入法
+
+\subsection{自动造词和删减}
+\begin{itemize}
+\item \cmd{ctrl +8} 选最近的字造词。方法二，先单字打字，再连续打，即造词成功
+\item \cmd{ctrl +7} 在有输入框的时候，可以从词库中删词，\red{不会用}
+\item \cmd{ctrl +6} 修改频率，\red{不会用}
+\end{itemize}
+
+\section{五笔}
+\begin{multicols}{3}
+\begin{itemize}
+\itemsep0em
+\item 凸 hgmg
+\item 
+\end{itemize}
+\end{multicols}
+
+\section{二笔}
+
+\cmd{sudo apt install fcitx-table-erbi} 安装青松二笔（二笔标版）。青松二笔、纯净二笔属于原二笔。超强二笔采用了末笔。青松二笔、纯净二笔和超强二笔均采用原版二笔的键盘图。
+
+\cmd{sudo dpkg -i ~/Apps/fcitx-table-cqlb.deb} 安装离线的超强二笔
+
+
+\begin{tabular}{cccccccccc}
+\multicolumn{10}{c}{青松二笔一级简码} \\
+\hline
+起Q&	为W&	而E&	人R&	他T&	一Y&	大U&	有I&	我O&	平P\\
+安A&	是S&	的D&	分F&	个G&	和H&	就J&	可K&	了L&	*\\
+在Z&	学X&	成C&	这V&	不B&	你N&	们M&	*&	*&	*\\
+\hline
+\multicolumn{10}{c}{超强二笔（或超强音形）一级简码} \\
+\hline
+起Q&	为W&	而E&	人R&	他T&	一Y&	以U&	有I&	我O&	平P\\
+安A&	是S&	的D&	分F&	个G&	和H&	就J&	可K&	了L&	*\\
+在Z&	学X&	成C&	这V&	不B&	你N&	们M&	*&	*&	*\\
+\hline
+\end{tabular}
+
+\subsection{超强二笔打字规则}
+\begin{itemize}
+\item 独体字:拼音首字母 + 前两笔 + 末笔\\
+如： 雨 YJV = Y（首音）+ J（一丨）+ V（丶）
+\item 合体字 后半是合体结构：拼音首字母 + 前半前两笔 + 后半首部前两笔 + 后半次部前两笔\\
+如： 撕 SUJE = S（首音）+ U（扌）+ J（一丨）+ E（ノノ）
+\item 合体字 后半是独体结构：拼音首字母 + 前半前两笔 + 后半前两笔 + 后半末笔\\
+如： 铺 PZJV = P（首音）+ Z（钅）+ J（一丨）+ V（丶）
+\item 字根：Z钅X木C氵V土B艹S日D月F亻L口U扌\\
+口诀：金木水土草，日月人口手。\\
+注：金=钅 水=氵 曰=日 人=亻 手=扌\\
+字根整体取码，不能拆分为笔画。\\
+如字根有其它笔画穿过，则不再视为字根。\\
+如：土 TV = T（首音) + V（字根）\\
+如：教 JJQV = J（首音）+ J（二）+ Q（ノ一）+ D（丶）
+\item 打词：\\
+二字词：取每字前两码。\\
+如： 教程 JJCQ\\
+三字词：取第一字前两码和后两字第一码。\\
+如： 输入法 S;RF\\
+四字词：取每字第一码。\\
+如：超强二笔 CQEB\\
+多字词：取前三字和末字第一码。\\
+如： 中华人民共和国 ZHRG
+\item 全形输入与拼音输入
+全形可以输入偏旁\\
+不会读的字可选择全形方式，方法是“i+单字全形”。\\
+如：瘿 IYG,\\
+如：\red{首 SIWZ，IIWZ} 难道“首”字是上下结构的合体字?\\
+不会写的字可选择拼音方式，方法是“i+单字拼音”。\\
+如：睿 IRUI
+\end{itemize}
+
+\section{latex}
+\cmd{sudo apt install fcitx-table-latex} 用于在非\LaTeX{}环境下输入各种字符

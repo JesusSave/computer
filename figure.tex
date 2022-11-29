@@ -1,0 +1,103 @@
+\chapter{Figure}
+
+\section{Convert format}
+
+\begin{itemize}
+\item \cmd{convert  -resize 50\% source.png dest.jpg} reduce figure size
+\item flag \blue{-sDEVICE} declare the png format
+\item flag \blue{-r} is the dpi
+\item \cmd{gs -dNOPAUSE -sDEVICE=jpeg -r144 -sOutputFile=p\%03d.jpg file.pdf} convert pdf to jpeg
+\item \cmd{gs -sDEVICE=pngalpha -o output.png input.pdf}
+\item 
+\begin{tabular}{ll}
+\hline
+pngalpha & alpha background\\
+png16m & colorful background\\
+png256 & colorful with 256 bit\\
+png16 & colorful low quality\\
+pnggray & gray\\
+\hline
+\end{tabular}
+\item \cmd{gs -sDEVICE=pngalpha -dFirstPage=10 -dLastPage=20 -o out-\%03d.png -r500 input.pdf} convert PDF from 10 to 20 pages to png
+\item \cmd{gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -sOutputFile=output.pdf input.pdf} compress pdf size. PDFSETTINGS options are dpi in decreasing sequence as default, prepress, printer, ebook and screen.
+\item \cmd{tiff2pdf -o out.pdf in.tif} convert tif figure into PDF
+\item \cmd{mogrify -format jpg *.bmp} convert bmp to jpg
+\item \cmd{mogrify -format png *.jpg} convert jpg to png
+\item \cmd{mogrify -resize 320x240 *.jpg} resize
+\end{itemize}
+
+\subsection{Convert PDF to YouTube ratio PNG and crop}
+
+\begin{itemize}
+\item\cmd{convert -density 150 book.pdf[0] -quality 90 out.png} convert pdf page $1$ to png format
+\item\cmd{identify fig.png} check the size of the figure
+\item\cmd{convert fig.png -crop 1600x900+0+150 out.png} crop YouTube ratio
+\item\cmd{convert fig.png -crop 1920x1080+0+150 out.png} crop YouTube ratio
+\end{itemize}
+
+\section{Crop}
+
+\begin{itemize}
+\item \cmd{convert input.png -trim output.png} trim all the margins
+\item \cmd{convert input.png -trim info:} print the margin (edge) infomation
+\item \cmd{convert test.png -trim  -format '\%[fx:w]x\%[fx:h]+\%[fx:page.x]+\%[fx:page.y]' info:} print trimed size and starting coordinate
+\item \cmd{convert test.png -trim  -format '\%[fx:w+20]x\%[fx:h+20]+\%[fx:page.x-10]+\%[fx:page.y-10]' info:} print a expanded trimmed figure size
+\item \cmd{convert fig.png -crop 1600x900+0+150 out.png}  rm margin wxh+x0+y0
+\item \cmd{display example.jpg} render image on the screen, left click > "Transform" > crop.
+\end{itemize}
+
+\section{Append}
+\begin{itemize}
+\item \cmd{convert image1.png image2.png image3.png -append result.png} vertical append
+\item \cmd{convert image1.png image2.png image3.png +append result.png} horizontal append
+\end{itemize}
+
+
+\section{Rotate image}
+\begin{itemize}
+\item \cmd{convert input.jpg -rotate 90 output.jpg} rotate image 90 degree
+\end{itemize}
+
+
+\section{Change DPI}
+
+我有点迷糊DPI 与resolution的含义关系。现更改resolution吧
+
+\begin{itemize}
+\item \cmd{identify -format '\%x,\%y\n' imagefile} resolution in ppi (pixels per inch)
+\item \cmd{gimp imagefile, alt+enter} check resolution by GIMP
+\item \cmd{identify -verbose fig_in} 查看resolution
+\item \cmd{convert fig_in -density 610 fig_out} 改变resolution
+\item \cmd{convert -units PixelsPerInch fig_in -density 610 fig_out}
+\item \red{爲什麼改了DPI圖片大小不變？}
+\end{itemize}
+
+\section{Resize}
+
+\begin{itemize}
+\item \cmd{convert -resize 20\% fig_in fig_out} reduce to 20 percent
+\end{itemize}
+
+
+\section{Anomation}
+
+\cmd{convert -delay 20 -loop 0 input*.png out.gif}
+\begin{itemize}
+\item \verb|-delay {time}| unit in 1/100th of a second
+\item \verb|-loop {number}| play how many times. But 0 means non stop. 
+\end{itemize}
+
+\section{Background}
+\begin{enumerate}
+\item\cmd{convert image1.jpg -fuzz 20\%\% -transparent White image2.png} 
+\item\cmd{convert image1.png -threshold 10\%\% image2.png}
+\item\cmd{backgroundremover -i "/path/to/file.jpg" -o "out.png"}
+\item\cmd{backgroundremover -i "/path/to/video.mp4" -tg -o "output.gif"} video source
+\end{enumerate}
+
+\section{Screeshot}
+\begin{enumerate}
+\item\cmd{screengrab -a} screenshot active window
+\item\cmd{screengrab -r} screenshot region
+\item\cmd{sleep 2 && screengrab -a} launch screengrab after 2 seconds
+\end{enumerate}

@@ -1,0 +1,50 @@
+\chapter{Font}
+
+
+
+\section{Install Fonts for OS}
+
+
+下载chenfont.ttf并移到文件夹，
+
+\cmd{sudo mv chenfont.ttf /usr/share/fonts/truetype/chen/}
+
+再刷新字体缓存，
+
+\cmd{sudo mkfontscale}
+
+\cmd{sudo mkfontdir}
+
+\cmd{sudo fc-cache -fv}
+
+\cmd{fc-list} list installed fonts with paths
+
+\cmd{fc-list| grep CJK} list CJK fonts
+
+\cmd{fc-list :lang=zh} list Chinese fonts
+
+
+\begin{lstlisting}[language=bash, caption={show the installed package size}]
+dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+\end{lstlisting}
+
+\section{System Language}
+
+\begin{lstlisting}[language=bash, caption={Change System Language}]
+$sudoedit /etc/default/locale:
+
+LANG="en_US.UTF-8"
+LANGUAGE="en_US:en.UTF-8"
+
+$sudoedit ~/.pam_environment:
+
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+\end{lstlisting}
+
+
+
+
+
+
+

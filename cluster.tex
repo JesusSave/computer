@@ -1,0 +1,21 @@
+\chapter{Cluster}
+
+\section{Prometheus}
+\begin{itemize}
+\item The portals for clusters in Poland is PLGrid \url{https://portal.plgrid.pl/}, my login email is \url{mailto: qchen.astro@gmail.com}, my ID is plgqchen, my password is B**!
+\item \cmd{ssh plgqchen@pro.cyfronet.pl} login Prometheus
+\item \cmd{pro-show-grants} check available grants, like plgpic21
+\item \cmd{pro-fs} check disk quota, home and SCRATCH
+\item \cmd{/net/archive/groups/plggknalew} the location of group plggknalew
+\item \cmd{/net/scratch/people/plgqchen/} my scratch folder, 2022 I got 93 TB quota
+\item \cmd{pro-jobs} check jobs
+\item time limit 72 hours
+\item QC tried biggest simulation is $54\times24=1296$ cores (25/9/2022).
+\item QC tried $96\times24=2304$ cores, but mem usage is zero, runs 2 hours and no data coming out, so canceled (25/9/2022).
+\end{itemize}
+
+They recently restricted compiling codes on the login node. The code should actually compile OK. Linking fails on a login node, but it will be OK on the worker nodes when the job is submitted.
+You can start an interactive job, e.g.:
+\begin{itemize}
+\item\cmd{srun -p plgrid-testing -A plgpic21 --time=01:00:00 --pty /bin/bash -l}
+\end{itemize}

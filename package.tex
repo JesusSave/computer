@@ -1,0 +1,199 @@
+\chapter{Package}
+
+\section{Useful Apps}
+\begin{table}[ht]
+\caption{App lists}
+\centering
+\begin{tabular}{c c c c}
+\hline\hline
+Name & example & notes \\ [0.5ex]
+\hline
+wc & {wc 1.dat} & word count of line, word, bytes\\[1ex]
+paste & paste -sd+ timestep.dat | bc &  print the sum of one column data\\
+sed & {sed -i.bak -e '5,10d;12d' file} & delete 5 to 10 and 12 line.\\
+expr & {expr 14 \% 9} & 整数运算 14-9 = 5 \\
+expr & {expr 14 - 9} & 整数运算 14-9 =  \\
+cat & {cat 3.dat >> 1.dat} & combine 2.dat to 1.dat.\\
+\hline
+\end{tabular}
+\label{tab_apps}
+\end{table}
+
+\section{Install and Remove}
+\begin{itemize}
+\item\cmd{apt-cache showpkg appname} show available package versions
+\item\cmd{apt-mark hold appname} on hold app prevent upgrading
+\item\cmd{apt-cache rdepends packagename} show package dependance
+\item\cmd{sudo apt-get install <package-name>=<package-version-number>} install according to version
+\item\cmd{sudo apt install appname}
+\item\cmd{sudo apt remove appname}
+\item\cmd{sudo apt-get purge nvidia-*} purge nvidia
+\item\cmd{sudo apt-get autoclean} to clean up partial pakages
+\item\cmd{sudo apt-get autoremove} to clean up apt cache
+\item\cmd{sudo apt-get clean} to remove any unused dependencies
+\item\cmd{man apt-get} to get more info on apt-get and how to use it.
+\item\cmd{/var/log/apt/history.log} is the history of apt
+\end{itemize}
+
+\subsection{Upgrade upgradable}
+\begin{itemize}
+\item\cmd{apt list --upgradable}
+\item\cmd{sudo apt-get dist-upgrade} upgrade upgradable with denpendencies
+\end{itemize}
+
+\section{Install from local file}
+\cmd{sudo dpkg -i example.deb} install \\
+\cmd{sudo dpkg -r linuxqq} Remove
+
+\begin{lstlisting}[language=bash, caption={Purge Xfce}]
+$dpkg -l | grep .xfce. | awk '{print $2}' |
+xargs sudo apt-get purge -V --auto-remove -yy
+\end{lstlisting}
+
+\section{Check installed}
+\begin{itemize}
+\item \cmd{dpkg -s mplayer} check if mplayer is installed
+\item \cmd{which mplayer} check the path of mplayer 
+\end{itemize}
+
+
+\section{Personal Package Archive (PPA)}
+
+\begin{itemize}
+\item\cmd{/etc/apt/sources.list} is the main PPA list
+\item\cmd{/etc/apt/sources.list.d/} is the folder for personal PPA list
+\item\cmd{sudo apt-add-repository ppa:whatever/ppa} install ppa
+\item\cmd{sudo add-apt-repository --remove ppa:whatever/ppa} remove ppa
+\item Alternative,
+\cmd{ls /etc/apt/sources.list.d}
+\item \cmd{sudo rm -i /etc/apt/sources.list.d/myppa.list}
+\end{itemize}
+
+\subsection{public key}
+
+\begin{itemize}
+\item if \cmd{Err:1 http://ftp.agh.edu.pl/ubuntu bionic-updates InRelease                  
+  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 3B4FE6ACC0B21F32}
+\item then \cmd{sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32}
+\end{itemize}
+
+
+\subsection{Default Repository}
+
+\begin{itemize}
+\item \cmd{sudo mv /etc/apt/sources.list ~} backup your current source list
+\item \cmd{sudo touch /etc/apt/sources.list} create an empty list
+\item \cmd{software-properties-gtk} Open Software \& Updates, and choose the canonical source and main server
+\end{itemize}
+
+
+\section{Packages Broken}
+\begin{enumerate}
+\item\cmd{Errors were encountered while processing: /var/cache/apt/archives/libglx-mesa0_18.0.5-0ubuntu0~18.04.1_amd64.deb}\\
+when errors happen, then
+\item\cmd{sudo apt --force-overwrite /var/cache/apt/archives/libglx-mesa0_18.0.5-0ubuntu0~18.04.1_amd64.deb} \\
+force install when have depended packages
+\item\cmd{dpkg -P --force-depends App} to remove depended packages
+\end{enumerate}
+
+\subsection{apt --fix-broken install}
+\begin{enumerate}
+\item\cmd{sudo apt -o Dpkg::Options::="--force-overwrite" --fix-broken install}\footnote{\url{https://unix.stackexchange.com/a/624842/266769}}
+\end{enumerate}
+
+\section{Install without sudo}
+
+\begin{lstlisting}[language=bash, caption={dpkg install from deb}]
+apt download appname   # download the package
+dpkg -x package.deb dir # install to dir
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=bash, caption={manually install from deb}]
+cd ~/chen_install
+apt download mupdf # dowmlad mupdf package
+ar x mupdf*.deb 
+tar xvf data.tar.gz
+PATH="$PATH":~/chen_install/usr/bin
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, caption={run appimage}]
+chmod a+x example.AppImage
+./example.AppImage
+\end{lstlisting}
+
+
+
+\subsection{install from source}
+
+\begin{lstlisting}[language=bash, caption={install from source}]
+apt-get source package # doesn't work???
+cd package
+./configure --prefix=$HOME/chen_install # install to chen_install
+make
+make install
+\end{lstlisting}
+
+
+\section{PATH}
+
+\begin{itemize}
+\item Shell PATH 变量用于系统查找命令的路径
+\item \verb|echo $PATH| 查询当前 PATH 环境变量
+\item \verb|cp my_app.sh /bin/| 可以把自己的脚本复制到 PATH 变量定义的路径（比如/bin/），不用自己再写PATH
+\item \verb|PATH="$PATH":~/chen_install/usr/bin| 通过变量叠加的方式临时加入我自己的路径，注销后失效
+\item \verb|~/.bash_aliases| is a sub file of \verb|~/.bashrc|, and is dedicated for the client to define PATH
+\end{itemize}
+
+
+\subsection{temperary client}
+
+\begin{itemize}
+\item 以添加mongodb server为列
+\item \verb|export PATH=/usr/local/mongodb/bin:$PATH|
+\item 生效方法：立即生效
+\item 有效期限：临时改变，只能在当前的终端窗口中有效，当前窗口关闭后就会恢复原有的path配置
+\item 用户局限：仅对当前用户
+\end{itemize}
+ 
+\subsection{.bashrc permanent client}
+
+\begin{itemize}
+\item \cmd{vim ~/.bashrc}
+\item 在最后一行添上： \cmd{export PATH=/usr/local/mongodb/bin:$PATH}
+\item 生效方法：
+  \begin{itemize}
+  \item 1、对新终端窗口生效
+  \item 2、之前打开的窗口可刷新\cmd{source ~/.bashrc} 生效
+  \end{itemize}
+\item 有效期限：永久有效
+\item 用户局限：仅对当前用户
+\end{itemize}
+
+\subsection{profile All clinets permanant}
+
+\begin{itemize}
+\item \cmd{vim /etc/profile}
+\item 找到设置PATH的行，添加\cmd{export PATH=/usr/local/mongodb/bin:$PATH}
+\item 生效方法：系统重启
+\item 有效期限：永久有效
+\item 用户局限：对所有用户
+\end{itemize}
+ 
+\subsection{environment permanent}
+
+\begin{itemize}
+\item \cmd{vim /etc/environment}
+\item 原路径 \cmd{PATH="/usr/local/sbin:/usr/local/bin:..."}
+\item 在其后添加新路径 \cmd{":/usr/local/mongodb/bin"}
+\item 生效方法：系统重启
+\item 有效期限：永久有效
+\item \red{用户局限如何？}
+\end{itemize}
+
+
+\section{SVN}
+
+\begin{lstlisting}[language=bash, caption={Download source files of PDFsandwich}]
+svn checkout svn://svn.code.sf.net/p/pdfsandwich/code/trunk/src pdfsandwich
+\end{lstlisting}

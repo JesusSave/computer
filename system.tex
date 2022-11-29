@@ -1,0 +1,109 @@
+\chapter{System}
+
+
+\section{Check version}
+
+\begin{itemize}
+\item\cmd{cat /etc/*-release} or \cmd{ cat /etc/os-release} check your Linux distribution
+\item\cmd{neofetch} check distribution once you installed neofetch
+\end{itemize}
+
+
+\section{Mirror}
+
+\begin{itemize}
+\item Software \& Update mirror better to choose the main server, otherwise always couldn't find some packages
+\end{itemize}
+
+
+\section{Update system}
+\begin{itemize}
+\item\cmd{sudo apt update && sudo apt upgrade && sudo apt dist-upgrade && sudo do-release-upgrade}
+\item\cmd{sudo do-release-upgrade -d} -d means include not offcially version
+\end{itemize}
+
+
+\section{Autostart}
+
+\subsection{Network Indicator}
+
+\cmd{sudo -H gedit /etc/xdg/autostart/nm-applet.desktop}
+
+\begin{lstlisting}[language=bash, caption={replace Exec line nm-applet with dbus-launch nm-applet}]
+Exec dbus-launch nm-applet
+\end{lstlisting}
+
+
+\subsection{Bluetooth Autostart}
+\begin{itemize}
+\item For ubuntu 20.10+ edit \cmd{/etc/bluetooth/main.conf} and find the line \cmd{AutoEnable=true}
+\end{itemize}
+
+\section{User}
+
+\cmd{sudo pkill -u username} user logout
+
+
+
+\section{System Problem}
+
+\subsection{Touchpad click don't work occasionaly}
+Next time, try this
+\cmd{gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true} {\red does't work, 20200109}
+
+\cmd{xinput list-props 11} to see which userspace driver is used (libinput, or synaptics). 11 is the touchpad id from xinput list.
+
+For LxQt, driver libinput settings are in
+\cmd{/usr/share/X11/xorg.conf.d/40-libinput.conf}
+
+
+\begin{lstlisting}[language=Python, caption={/usr/share/X11/xorg.conf.d/40-libinput.conf}]
+Section "InputClass"   
+  Identifier "touchpad"  
+  Driver "libinput"  
+  MatchIsTouchpad "on"  
+  Option "Tapping" "on"
+  Option "TappingButtonMap" "lmr" 
+EndSection
+\end{lstlisting}
+
+
+\subsection{Restart the touchpad driver}
+
+\cmd{sudo  modprobe -r psmouse} to close the touchpad driver
+
+\cmd{sudo modprobe psmouse} to restart the driver {\red dosen't solve the sleeping touchpad click}
+
+
+\subsection{Check the touchpad driver}
+
+\cmd{xinput list} list all the driver index, e.g. SynPS/2 Synaptics TouchPad  id=11	[slave  pointer  (2)]\\
+\cmd{xinput list-props 11} list the id = 11 detail\\
+\cmd{xinput set-prop 11 165 1} set id=11, thread 165 to value 1 (or 0)
+
+\subsection{Replace touchpad driver}
+
+xf86-input-synaptics is no longer actively updated. If possible, use libinput
+
+\cmd{mkdir /etc/X11/xorg.conf.d}
+\cmd{cp /usr/share/X11/xorg.conf.d/50-synaptics.conf /etc/X11/xorg.conf.d/50-libinput.conf}
+
+Remove the xserver-xorg-input-synaptics package. (important)
+
+\cmd{apt remove xserver-xorg-input-synaptics}
+\cmd{apt install xserver-xorg-input-libinput}
+
+restart your DM; e,g:
+\cmd{systemctl restart sddm}
+
+through the UI mouse\&Curser setting, touchpad, choose two-finger 
+
+Hope this time the touchpad works longer
+
+
+\section{Time and Date}
+
+\begin{itemize}
+\item \cmd{sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"} set Local time and Universal time to sync internet
+\item \cmd{timedatectl set-local-rtc 1} set Real Time to Local time
+\end{itemize}

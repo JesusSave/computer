@@ -1,9 +1,104 @@
 \chapter{GitHub}
 
-\cmd{git init} Initial folder
-\\
-\cmd{git pull origin master} pull files to local.\\
-\cmd{gi add .} Add all files to github.\\
-\cmd{git push origin master} push file to github.\\
+\begin{chapquote}{Proverbs 4:7, \textit{ASV Bible}}
+``Wisdom is supreme. Get wisdom. Yes, though it costs all your possessions, get understanding.''
+\end{chapquote}
 
+\section{About}
+\begin{enumerate}
+\item Linus created Git in 2005 for Linux development. 
+\item Git是分佈式版本控制系統 
+\end{enumerate}
 
+\section{Create reposites}
+\begin{enumerate}
+\item\cmd{git init} Initial folder as 工作區
+\item\cmd{git add filename} add filename to the 暫存區 stage (index) in \verb|.git|  
+\item\cmd{git add .} Add all files to 暫存區.
+\item\cmd{git commit -m "description for this commit"} add description to this commit, 暫存區內容提交到 master (head) 分支
+\item\cmd{git push origin master} push file to github.
+\end{enumerate}
+
+\section{Versions}
+\subsection{Files}
+\begin{enumerate}
+\item\cmd{git status} check status
+\item\cmd{git diff filename} check difference of filename
+\item\cmd{git checkout -- filename} 撤銷filename 到最後的狀態
+\item\cmd{git reset HEAD filename} 把暫存區的修改撤銷掉(unstage)，重新放回工作區
+\item\cmd{git rm filename} remove file in the 暫存區, and commit it
+\end{enumerate}
+
+\subsection{Reposits}
+\begin{enumerate}
+\item\cmd{git log} check 3 recent history entry
+\item\cmd{git reset --hard HEAD^} retreat to last version 
+\item\cmd{git reset --hard commitprefix} reset head version according to coomitprefix (few digits)
+\item\cmd{git reflog} check commands log
+\end{enumerate}
+
+\section{Upload}
+\subsection{SSH Key}
+\begin{enumerate}
+\item\cmd{ssh-keygen -t rsa -C "c275633094@gmal.com"} create SSH Key, password can be none. \verb|.ssh/id_rsa| 爲私鑰，\verb|./ssh/id_rsa.pub| 是公鑰
+\item GitHub> Account settings> SSH Keys> Add SSH Key> paste contents in \verb|id_rsa.pub|, 每個電腦單獨生成公鑰
+\end{enumerate}
+
+\subsection{Create a new repo}
+\begin{enumerate}
+\item GitHub>Create a new repo>Create
+\item\cmd{git remote add origin git@github.com:JesusSave/mGRB_afterglow.git} 關聯本地與遠程的庫 
+\item\cmd{git push -u origin master} \verb|-u| 把本地和遠程的master 分支關聯起來，一次之後就可以簡化這個標籤
+\item\cmd{git remote -v} 查看遠程庫信息
+\item\cmd{git remote rm origin} 刪除本地和遠程的綁定關係
+\end{enumerate}
+
+\subsection{Clone a reposite}
+\begin{enumerate}
+\item\cmd{git clone git@github.com:JesusSave/mGRB_afterglow.git} 克隆遠程庫
+\end{enumerate}
+
+\section{Brance}
+\begin{enumerate}
+\item\cmd{git switch -c dev} switch to new created branch 'dev'
+\item\cmd{git branch} check current branch
+\item\cmd{git switch master} switching to branch 'master'
+\item\cmd{git merge dev} merge branch dev to current branch
+\item\cmd{git merge --no-ff dev} merge without fast forward, 別人看不出合併信息
+\item\cmd{git branch -d dev} delete branch 'dev
+\item 實際開發中，master 用於發布新版本，dev 用於平時開發，不同開發人員合並到 dev 上
+\end{enumerate}
+
+\subsection{Bug}
+\begin{enumerate}
+\item\cmd{git stash} 把當前工作現場儲藏起來 
+\item\cmd{git stash list} 工作現場列表
+\item\cmd{git stash apply} 恢復工作現場
+\item\cmd{git stash drop} 刪除儲藏的工作現場
+\item\cmd{git stash pop} 恢復並同時把stash 內容刪除
+\item\cmd{git cherry-pick 4c805e2} 複製 4c805e2 提交的變化到當前分支
+\end{enumerate}
+
+\subsection{Feature}
+\begin{enumerate}
+\item 開發新功能，爲避免混亂，建議另建立一個分支，名爲 feature 
+\item\cmd{git branch -D feature-vulcan} 強行刪除 feature-vulcan 分支
+\end{enumerate}
+
+\subsection{Pull}
+\begin{enumerate}
+\item\cmd{git branch --set-upstream-to=origin/dev dev} 將遠程origin/dev 與本地 dev 連接起來
+\item\cmd{git pull} 抓遠程到本地 
+\end{enumerate}
+
+\section{Tag}
+\begin{enumerate}
+\item\cmd{git tag v1.0} 加入新標籤v1.0
+\item\cmd{git tag v0.9 f52c633} 對某次commit id 打標籤
+\item\cmd{git tag -a v0.9 -m "version 0.9 released" f52c633} 創建帶說明的標籤
+\item\cmd{git tag} 查看所有標籤
+\item\cmd{git push origin v1.0} 推送標籤到遠程
+\item\cmd{git push origin --tags} 推送所有標籤到遠程
+\item\cmd{git tag -d v0.9} 刪除本地標籤
+\item\cmd{git push origin :refs/tags/v0.9} 刪除遠程標籤
+\end{enumerate}
